@@ -23,9 +23,9 @@ settlements, resources, regions, and river connection styles.
 
 ## Web Converter
 
-The static browser version lives in `web/`. It uses the shared
-`@colonization-re/web-ui` stylesheet from its GitHub release assets, so it can
-be served as plain files without a build step.
+The static browser version lives in `web/`. It vendors the shared
+`@colonization-re/web-ui` stylesheet from `../web-ui/dist/col.css`, so it can
+be served as plain files without a build step or package install.
 
 ```bash
 python -m http.server 8000 -d web
