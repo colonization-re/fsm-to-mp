@@ -1,0 +1,51 @@
+.app-shell {
+  min-height: 100svh;
+  display: grid;
+  grid-template-rows: auto 1fr;
+}
+
+.converter-main {
+  align-self: center;
+  width: min(100%, 780px);
+  margin: 0 auto;
+  padding: 48px 16px;
+}
+
+.converter-panel {
+  display: grid;
+  gap: 18px;
+}
+
+.converter-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.converter-status {
+  min-height: 48px;
+}
+
+.converter-download[hidden] {
+  display: none;
+}
+
+.converter-details {
+  margin: 0;
+}
+
+.converter-warnings:empty {
+  display: none;
+}
+
+@media (max-width: 560px) {
+  .converter-main {
+    align-self: start;
+    padding-top: 28px;
+  }
+
+  .converter-actions > * {
+    width: 100%;
+  }
+}

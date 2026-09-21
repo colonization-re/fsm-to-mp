@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FSM to MP converter</title>
+<meta name="description" content="Convert FreeCol .fsm map-editor saves to Sid Meier's Colonization .MP maps in the browser.">
+<link rel="stylesheet" href="https://github.com/colonization-re/web-ui/releases/latest/download/col.css">
+<link rel="stylesheet" href="./styles.css">
+
+<body class="col-ruled">
+  <div class="app-shell">
+    <div class="col-bar">
+      <div class="col-bar-in">
+        <a class="col-brand" href="./"><span class="col-brand-mark"></span> fsm-to-mp</a>
+        <span class="col-badge col-badge--line">browser</span>
+      </div>
+    </div>
+
+    <main class="converter-main">
+      <section class="col-plate converter-panel" aria-labelledby="converter-title">
+        <div>
+          <p class="col-eyebrow">FreeCol to Colonization</p>
+          <h1 id="converter-title">Convert an .fsm map</h1>
+          <p class="col-lead">Pick a FreeCol map-editor save and download a Colonization .MP map. The file stays in this browser.</p>
+        </div>
+
+        <div class="converter-actions">
+          <label class="col-btn col-btn--file col-btn--lg">
+            Upload .fsm
+            <input data-file type="file" accept=".fsm,.zip,application/zip">
+          </label>
+          <a class="col-btn col-btn--outline col-btn--lg converter-download" data-download hidden>Download</a>
+        </div>
+
+        <p class="col-note col-note--line converter-status" data-status>Waiting for a map.</p>
+
+        <dl class="col-props converter-details" data-details></dl>
+        <ul class="col-list converter-warnings" data-warnings></ul>
+      </section>
+    </main>
+  </div>
+
+  <script type="module" src="./app.js"></script>
+</body>
+</html>

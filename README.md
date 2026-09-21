@@ -21,6 +21,20 @@ The CLI prints conversion warnings for information that original Colonization
 cannot represent exactly, such as FreeCol lakes, great rivers, native
 settlements, resources, regions, and river connection styles.
 
+## Web Converter
+
+The static browser version lives in `web/`. It uses the shared
+`@colonization-re/web-ui` stylesheet from its GitHub release assets, so it can
+be served as plain files without a build step.
+
+```bash
+python -m http.server 8000 -d web
+```
+
+GitHub Pages is deployed automatically from `web/` by
+`.github/workflows/pages.yml`. Published releases also get a
+`web-converter.zip` asset containing the same static files for manual hosting.
+
 ## Documentation
 
 - `docs/formats.md` documents the researched FreeCol `.fsm` and Colonization
