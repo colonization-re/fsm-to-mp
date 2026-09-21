@@ -1,0 +1,1 @@
+"""FreeCol map reader package."""
