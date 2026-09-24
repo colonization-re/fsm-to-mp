@@ -19,8 +19,8 @@ tag against `__version__`, re-runs the tests, builds a runnable single-file
 `fsm-to-mp-web-<version>.zip` and a source `.zip`, and creates the GitHub
 release with the notes taken from that same changelog section (found by its
 `## <version> - <date>` heading). [.github/workflows/pages.yml](.github/workflows/pages.yml)
-deploys `web/` to GitHub Pages on the same tag push (and on every push to
-`main`). There is no PyPI package.
+deploys `web/` to GitHub Pages on every push to `main`, which includes the
+release commit (the `github-pages` environment rejects tags). There is no PyPI package.
 
 When the user says "release":
 

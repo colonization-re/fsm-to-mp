@@ -3,7 +3,8 @@ name: Deploy web converter
 on:
   push:
     branches: [main]
-    tags: ["v*"]
+  # No tag trigger: the github-pages environment only accepts main, and
+  # scripts/release.py pushes main with the release commit anyway.
   workflow_dispatch:
 
 permissions:

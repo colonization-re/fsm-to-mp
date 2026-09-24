@@ -4,8 +4,8 @@ name: release
 # writes the changelog section, bumps the version in the package and the web
 # page, commits and tags; this job re-checks that tag against the package,
 # re-runs the tests, builds the downloads and writes the release notes from the
-# same changelog section. The web converter itself is deployed by pages.yml,
-# which runs on the same tag push.
+# same changelog section. The web converter itself is deployed by pages.yml
+# when the release commit reaches main.
 on:
   push:
     tags:

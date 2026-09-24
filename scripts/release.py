@@ -27,7 +27,8 @@ What one run does, in order, stopping at the first thing that is wrong:
 
 Pushing that tag is what publishes the release: `.github/workflows/release.yml`
 re-runs the tests, builds the downloads and creates the GitHub release from the
-same changelog section; `.github/workflows/pages.yml` deploys the web converter.
+same changelog section; `.github/workflows/pages.yml` deploys the web converter
+when the release commit reaches main.
 This script pushes only when asked (`--push`), and otherwise prints the two
 commands, plus how to undo the commit and the tag.
 """
