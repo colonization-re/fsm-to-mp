@@ -5,6 +5,7 @@ import json
 import sys
 from pathlib import Path
 
+from fsm_to_mp import __version__
 from fsm_to_mp.convert import convert_map, encode_plane0
 from fsm_to_mp.fsm.reader import read_fsm, summarize_fsm
 from fsm_to_mp.mp.reader import read_mp
@@ -18,6 +19,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("output", type=Path, nargs="?", help="Colonization .MP output path")
     parser.add_argument("--summary", action="store_true", help="print a JSON summary of the .fsm and exit")
     parser.add_argument("--warnings", choices=("summary", "all", "none"), default="summary")
+    parser.add_argument("--version", action="version", version=f"fsm-to-mp {__version__}")
     args = parser.parse_args(argv)
 
     if args.summary:

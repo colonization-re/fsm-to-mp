@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "fsm-to-mp"
-version = "0.1.0"
+dynamic = ["version"]
 description = "Convert FreeCol .fsm maps to Sid Meier's Colonization .MP maps."
 readme = "README.md"
 requires-python = ">=3.11"
@@ -20,6 +20,9 @@ fsm-to-mp = "fsm_to_mp.cli:main"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+
+[tool.hatch.version]
+path = "src/fsm_to_mp/__init__.py"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/fsm_to_mp"]

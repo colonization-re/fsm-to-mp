@@ -24,16 +24,25 @@ settlements, resources, regions, and river connection styles.
 ## Web Converter
 
 The static browser version lives in `web/`. It vendors the shared
-`@colonization-re/web-ui` stylesheet from `../web-ui/dist/col.css`, so it can
-be served as plain files without a build step or package install.
+`@colonization-re/web-ui` stylesheet, pinned to a release tag and sha256 in
+`web/vendor/col-css.json` (update with `python scripts/vendor_css.py <tag>`),
+so it can be served as plain files without a build step or package install.
 
 ```bash
 python -m http.server 8000 -d web
 ```
 
 GitHub Pages is deployed automatically from `web/` by
-`.github/workflows/pages.yml`. Published releases also get a
-`web-converter.zip` asset containing the same static files for manual hosting.
+`.github/workflows/pages.yml`.
+
+## Releases
+
+The Python tool and the web converter share one version and are released
+together with `python scripts/release.py patch|minor|major`. Each
+[GitHub release](https://github.com/colonization-re/fsm-to-mp/releases)
+carries a runnable `fsm-to-mp-<version>.pyz` (`python3 fsm-to-mp-<version>.pyz
+map.fsm out.MP`), the static `fsm-to-mp-web-<version>.zip` for self-hosting,
+and a source `.zip`; notes come from `CHANGELOG.md`.
 
 ## Documentation
 

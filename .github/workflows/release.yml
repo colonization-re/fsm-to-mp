@@ -1,0 +1,95 @@
+name: release
+
+# Pushing a tag is what publishes a release. `python scripts/release.py <bump>`
+# writes the changelog section, bumps the version in the package and the web
+# page, commits and tags; this job re-checks that tag against the package,
+# re-runs the tests, builds the downloads and writes the release notes from the
+# same changelog section. The web converter itself is deployed by pages.yml,
+# which runs on the same tag push.
+on:
+  push:
+    tags:
+      - "v[0-9]+.[0-9]+.[0-9]+"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # 3.11 is the floor pyproject.toml promises, so the .pyz is built on it.
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: The tag and the package must agree
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          package=$(PYTHONPATH=src python3 -c 'import fsm_to_mp; print(fsm_to_mp.__version__)')
+          if [ "$version" != "$package" ]; then
+            echo "tag $GITHUB_REF_NAME says $version, fsm_to_mp.__version__ says $package" >&2
+            exit 1
+          fi
+          echo "VERSION=$version" >> "$GITHUB_ENV"
+
+      # Includes the web-ui pin check and the web page's version.
+      - name: Tests
+        run: |
+          python3 -m pip install -e ".[dev]"
+          python3 -m pytest -q
+          python3 -m fsm_to_mp --help
+
+      - name: Release notes from CHANGELOG.md
+        run: |
+          awk -v v="$VERSION" '
+            $0 ~ "^## " v " " { found = 1; next }
+            found && /^## / { exit }
+            found { print }
+          ' CHANGELOG.md > notes.md
+          if [ ! -s notes.md ]; then
+            echo "CHANGELOG.md has no '## $VERSION - <date>' section" >&2
+            exit 1
+          fi
+          cat notes.md
+
+      # Three downloads: a single runnable file for people who just want the
+      # tool, the static web converter for self-hosting, and the checkout
+      # itself for people who want the docs and tests.
+      - name: Build the .pyz, the web .zip and the source .zip
+        run: |
+          mkdir -p dist build/stage
+          cp -r src/fsm_to_mp build/stage/
+          find build/stage -name '__pycache__' -type d -exec rm -rf {} +
+          printf 'import sys\n\nfrom fsm_to_mp.cli import main\n\nsys.exit(main())\n' \
+            > build/stage/__main__.py
+          python3 -m zipapp build/stage \
+            -p '/usr/bin/env python3' -o "dist/fsm-to-mp-$VERSION.pyz"
+          git archive --format=zip --prefix="fsm-to-mp-web-$VERSION/" \
+            -o "dist/fsm-to-mp-web-$VERSION.zip" "${GITHUB_REF_NAME}:web"
+          git archive --format=zip --prefix="fsm-to-mp-$VERSION/" \
+            -o "dist/fsm-to-mp-$VERSION.zip" "$GITHUB_REF_NAME"
+
+      - name: The built .pyz must run and report the same version
+        run: |
+          reported=$(python3 "dist/fsm-to-mp-$VERSION.pyz" --version)
+          if [ "$reported" != "fsm-to-mp $VERSION" ]; then
+            echo "the zipapp reports '$reported'" >&2
+            exit 1
+          fi
+          python3 "dist/fsm-to-mp-$VERSION.pyz" --help > /dev/null
+
+      - name: Publish
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" \
+            --title "fsm-to-mp $VERSION" \
+            --notes-file notes.md \
+            "dist/fsm-to-mp-$VERSION.pyz" \
+            "dist/fsm-to-mp-web-$VERSION.zip" \
+            "dist/fsm-to-mp-$VERSION.zip"
