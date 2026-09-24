@@ -7,6 +7,18 @@ map converted by an older version would convert differently in a way that
 breaks it, the minor when conversions or options are added, the patch for
 fixes. Cut a release with `python scripts/release.py`.
 
+## 0.1.1 - 2026-09-24
+
+Release tooling only; the converter, the command-line tool and the web page
+behave exactly as in 0.1.0.
+
+The web converter is now deployed from `main` alone. In 0.1.0 the Pages
+workflow also ran on the release tag, which the `github-pages` environment
+rejects, so every release showed a failed deploy even though the site had
+already been updated from `main`.
+
+[Compare with v0.1.0](https://github.com/colonization-re/fsm-to-mp/compare/v0.1.0...v0.1.1)
+
 ## 0.1.0 - 2026-09-24
 
 First release. `fsm-to-mp` converts FreeCol map-editor saves (`.fsm`) into the
